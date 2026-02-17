@@ -51,3 +51,29 @@ ic(y)
 addition_table: np.ndarray = x[:, np.newaxis] + y
 ic(addition_table.shape)
 ic(addition_table)
+
+print("""
+用 newaxis 建立「工序×工序時間比較矩陣」
+找出：
+      誰一定比誰早完成
+""")
+
+start: np.ndarray = np.array([0, 3, 5, 8])
+ic(start.shape)
+ic(start)
+
+proc_time: np.ndarray = np.array([3, 2, 4, 1])
+ic(proc_time.shape)
+ic(proc_time)
+
+finish: np.ndarray = start + proc_time
+ic(finish.shape)
+ic(finish)
+
+compare = finish[:, None] <= start[None, :]
+ic(compare)
+print("compare[i, j] = True  代表 i 完工 ≤ j 開始")
+
+print("""找可並行工序""")
+parallel = ~compare & ~compare.T
+ic(parallel)
