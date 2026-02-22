@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from collections import deque
 from icecream import ic
 import numpy as np
 
@@ -82,6 +81,73 @@ class Tree:
             else:
                 i = right_i
         return result
+    
+    def dfs_preorder_recursive_standard(self) -> list[int]:
+        result: list[int] = []
+        
+        def _dfs(i: int):
+            if self.is_null(i):
+                return None
+            
+            result.append(self.nums[i].item())
+
+            _dfs(i * 2 + 1)
+            _dfs(i * 2 + 2)
+        
+        _dfs(0)
+        return result
+    
+    def dfs_preorder_recursive_gen(self, i: int):
+        if self.is_null(i):
+            return None
+        
+        yield self.nums[i].item()
+        yield from self.dfs_preorder_recursive_gen(i * 2 + 1)
+        yield from self.dfs_preorder_recursive_gen(i * 2 + 2)
+
+    def dfs_inorder_recursive_standard(self) -> list[int]:
+        result: list[int] = []
+
+        def _dfs(i: int):
+            if self.is_null(i):
+                return None
+            
+            _dfs(i * 2 + 1)
+            result.append(self.nums[i].item())
+            _dfs(i * 2 + 2)
+
+        _dfs(0)
+        return result
+    
+    def dfs_inorder_recursive_gen(self, i: int):
+        if self.is_null(i):
+            return None
+        
+        yield from self.dfs_inorder_recursive_gen(i * 2 + 1)
+        yield self.nums[i].item()
+        yield from self.dfs_inorder_recursive_gen(i * 2 + 2)
+
+    def dfs_postorder_recursive_standard(self) -> list[int]:
+        result: list[int] = []
+
+        def _dfs(i: int):
+            if self.is_null(i):
+                return None
+            
+            _dfs(i * 2 + 1)
+            _dfs(i * 2 + 2)
+            result.append(self.nums[i].item())
+
+        _dfs(0)
+        return result
+    
+    def dfs_postorder_recursive_gen(self, i: int):
+        if self.is_null(i):
+            return None
+        
+        yield from self.dfs_postorder_recursive_gen(i * 2 + 1)
+        yield from self.dfs_postorder_recursive_gen(i * 2 + 2)
+        yield self.nums[i].item()
 
 
 bt = Tree([5,3,7,2,4,6,8,1])
@@ -89,3 +155,9 @@ ic(bt.nums)
 ic(bt.dfs_preorder())
 ic(bt.dfs_inorder())
 ic(bt.dfs_postorder())
+ic(bt.dfs_preorder_recursive_standard())
+ic(list(bt.dfs_preorder_recursive_gen(0)))
+ic(bt.dfs_inorder_recursive_standard())
+ic(list(bt.dfs_inorder_recursive_gen(0)))
+ic(bt.dfs_postorder_recursive_standard())
+ic(list(bt.dfs_postorder_recursive_gen(0)))
