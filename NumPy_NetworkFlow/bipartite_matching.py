@@ -127,5 +127,5 @@ edges = [
 ]
 
 matching = bipartite_matching(3,2,edges)
-ic(matching)
 
+ic(matching)
